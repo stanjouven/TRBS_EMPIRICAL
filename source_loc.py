@@ -45,7 +45,7 @@ PARAMETERS:
 Return dictionnary: node -> time to go from that node to the given observer
 '''
 def preprocess(observer, graph, distr):
-    for o in obs_filt:
+    for o in observer:
         ### Initialization of the edge delay
         edges = graph.edges()
         for (u, v) in edges:
