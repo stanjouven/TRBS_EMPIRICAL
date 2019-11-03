@@ -1,6 +1,7 @@
 import numpy as np
 import networkx as nx
 import operator
+import random
 
 import TRBS.source_estimation as se
 
@@ -19,10 +20,15 @@ def trbs(graph, obs_time_filt, distribution):
     #obs_time_filt = observer_filtering(obs_time, largest_graph_cc)
     obs_filt = np.array(list(obs_time_filt.keys()))
     path_lengths = {}
+    #nodes = len(list(graph.nodes()))
+    #random.sample(range(0, nodes-1), len(obs_filt))
+
+    graph = preprocess(o, graph, distribution)
 
     for o in obs_filt:
-        path_lengths[o] = preprocess(o, graph, distribution)
-        #print('path_lengths', o, '= ', path_lengths[o])
+        ### Computation of the shortest paths from every observer to all other nodes
+        path_lengths[o] = nx.single_source_dijkstra_path_length(graph, o)
+
 
     ### Run the estimation
     s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
@@ -39,26 +45,9 @@ PARAMETERS:
 Return dictionnary: node -> time to go from that node to the given observer
 '''
 def preprocess(observer, graph, distr):
-    ### Initialization of the edge delay
-    edges = graph.edges()
-    for (u, v) in edges:
-        graph[u][v]['weight'] = abs(distr.rvs())
-        #print('u: ',u, 'v: ', v, graph[u][v]['weight'])
-
-    ### Computation of the shortest paths from every observer to all other nodes
-    return  nx.single_source_dijkstra_path_length(graph, observer)
-
-'''
- Check if every observer is part of the largest graph component
- PARAMETERS:
-    OBS_TIME: dictionnary: node -> time of infection
-    LARGEST_GRAPH_CC: largest component of the graph
- RETURN
-    the obs_time dictionnary without the ones that are not part of largest_graph_cc
-'''
-def observer_filtering(obs_time, largest_graph_cc):
-    obs = np.array(list(obs_time.keys()))
-    for o in obs:
-        if not largest_graph_cc.has_node(o):
-            obs_time.delete(o)
-    return obs_time
+    for o in obs_filt:
+        ### Initialization of the edge delay
+        edges = graph.edges()
+        for (u, v) in edges:
+            graph[u][v]['weight'] = graph[u][v]['weight'] + abs(distr.rvs())
+    return graph
