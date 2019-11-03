@@ -23,7 +23,7 @@ def trbs_random_diff(graph, obs_time_filt, distribution):
     #nodes = len(list(graph.nodes()))
     #random.sample(range(0, nodes-1), len(obs_filt))
 
-    graph = preprocess(o, graph, distribution)
+    graph = preprocess(obs_filt, graph, distribution)
 
     for o in obs_filt:
         ### Computation of the shortest paths from every observer to all other nodes
