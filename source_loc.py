@@ -50,4 +50,7 @@ def preprocess(observer, graph, distr):
         edges = graph.edges()
         for (u, v) in edges:
             graph[u][v]['weight'] = graph[u][v]['weight'] + abs(distr.rvs())
+
+    for (u, v) in edges:
+        graph[u][v]['weight'] = graph[u][v]['weight'] / len(observer)
     return graph
