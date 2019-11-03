@@ -3,7 +3,7 @@ import networkx as nx
 import operator
 import random
 
-import TRBS.source_estimation as se
+import TRBS_RANDOM_DIFFUSION.source_estimation as se
 
 '''
 Enables to call functions to find the source estimation of the algorithm
@@ -12,7 +12,7 @@ PARAMETERS:
     obs_time: dictionnary node -> time of the infection
     distribution: distribution used
 '''
-def trbs(graph, obs_time_filt, distribution):
+def trbs_random_diff(graph, obs_time_filt, distribution):
 
     #print('obs time', obs_time_filt)
 
