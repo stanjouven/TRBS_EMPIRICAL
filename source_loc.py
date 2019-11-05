@@ -20,6 +20,7 @@ def trbs_empirical(graph, obs_time_filt, distribution):
     obs_filt = np.array(list(obs_time_filt.keys()))
 
     path_lengths = preprocess(obs_filt, graph, distribution, nb_diffusions)
+    print('final path ', path_lengths)
 
     ### Run the estimation
     s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
@@ -37,6 +38,7 @@ Return dictionnary: node -> time to go from that node to the given observer
 '''
 def preprocess(observer, graph, distr, nb_diffusions):
     path_lengths = initialize_dataframe(observer)
+    i = 0
     for diff in range(nb_diffusions):
         ### Initialization of the edge delay
         edges = graph.edges()
@@ -45,6 +47,9 @@ def preprocess(observer, graph, distr, nb_diffusions):
         for o in observer:
             ### Computation of the shortest paths from every observer to all other nodes
             path_lengths[str(o)] += pd.Series(nx.single_source_dijkstra_path_length(graph, o))
+        if i == 0:
+            print('path 1 ',path_lengths.to_dict())
+        i = i + 1
     path_lengths = path_lengths / len(observer)
     return path_lengths.to_dict()
 
