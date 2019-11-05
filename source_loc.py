@@ -44,7 +44,7 @@ def preprocess(observer, graph, distr, nb_diffusions):
             graph[u][v]['weight'] = graph[u][v]['weight'] + abs(distr.rvs())
         for o in observer:
             ### Computation of the shortest paths from every observer to all other nodes
-            path_lengths[o] += pd.Series(nx.single_source_dijkstra_path_length(graph, o))
+            path_lengths[str(o)] += pd.Series(nx.single_source_dijkstra_path_length(graph, o))
     path_lengths = path_lengths / len(observer)
     return path_lengths.to_dict()
 
@@ -53,5 +53,5 @@ def preprocess(observer, graph, distr, nb_diffusions):
 def initialize_dataframe(observer):
     path_lengths = pd.DataFrame()
     for o in observer:
-        path_lengths[o] = 0
+        path_lengths[str(o)] = 0
     return path_lengths
