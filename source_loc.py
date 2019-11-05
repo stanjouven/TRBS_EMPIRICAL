@@ -17,7 +17,7 @@ def trbs_empirical(graph, obs_time_filt, distribution):
     nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
     obs_filt = np.array(list(obs_time_filt.keys()))
 
-    path_lengths = preprocess(obs_filt, graph, distribution)
+    path_lengths = preprocess(obs_filt, graph, distribution, nb_diffusions)
 
     ### Run the estimation
     s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
