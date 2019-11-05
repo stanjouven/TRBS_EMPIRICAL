@@ -20,10 +20,7 @@ def trbs_empirical(graph, obs_time_filt, distribution):
     obs_filt = np.array(list(obs_time_filt.keys()))
 
     path_lengths = preprocess(obs_filt, graph, distribution, nb_diffusions)
-    print('final path ', path_lengths)
     path_lengths = compute_mean_shortest_path(path_lengths)
-    print('...............')
-    print(path_lengths)
 
     ### Run the estimation
     s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
@@ -32,31 +29,36 @@ def trbs_empirical(graph, obs_time_filt, distribution):
     return (s_est, ranked)
 
 '''
-Apply the given distribution to the edge of the graph.
+Apply the given distribution to the edge of the graph and then create a dataframe to store
+shortest path from every observer to every nodes in the graph
 PARAMETERS:
     observer: the observer node
     graph: the nx graph used
     distr: the distribution used
-Return dictionnary: node -> time to go from that node to the given observer
+    nb_diffusions: (int) number of time we do the diffusion
+Return pandas.DataFrame
 '''
 def preprocess(observer, graph, distr, nb_diffusions):
     path_lengths = pd.DataFrame()
-    i = 0
     for diff in range(nb_diffusions):
         path_lengths_temp = pd.DataFrame()
-        ### Initialization of the edge delay
+        ### edge delay
         edges = graph.edges()
         for (u, v) in edges:
             graph[u][v]['weight'] = graph[u][v]['weight'] + abs(distr.rvs())
         for o in observer:
             ### Computation of the shortest paths from every observer to all other nodes
             path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph, o))
-        if i == 0:
-            print('path 1 ',path_lengths.to_dict())
-        i = i + 1
         path_lengths = path_lengths.append(path_lengths_temp)
     return path_lengths
 
+
+'''
+Compute the mean shortest path of every diffusion
+PARAMETERS:
+    path_lengths:(pandas.DataFrame) containing all shortest path from every diffusion
+RETURN: dictionnary of dictionnary: {obs: {node: mean length}}
+'''
 def compute_mean_shortest_path(path_lengths):
     path_lengths.reset_index(inplace = True)
     path_lengths = path_lengths.rename({'index': 'node'}, axis = 1).set_index('node')

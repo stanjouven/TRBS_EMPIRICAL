@@ -2,7 +2,16 @@ import networkx as nx
 import numpy as np
 import collections
 
-
+'''
+Estimation of the true source according to the paper
+PARAMETERS:
+    graph: graph containing mean weights
+    obs_time: dictionnary: node -> time
+    path_lengths: dictionnary of dictionnary: {obs: {node: length}}
+RETURN:
+    source_candidates: source(s) estimation
+    var_T: dictionnary: {node: var} for every node 
+'''
 def source_estimate(graph, obs_time, path_lengths):
     T = collections.defaultdict(list)
     var_T = {}
@@ -17,5 +26,4 @@ def source_estimate(graph, obs_time, path_lengths):
     for src, value in var_T.items():
         if np.isclose(value, min_var, atol= 1e-08):
             source_candidates.append(src)
-    #print('source_candidates = ', source_candidates)
     return source_candidates, var_T
