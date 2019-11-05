@@ -11,8 +11,11 @@ import TRBS_EMPIRICAL.source_estimation as se
 Enables to call functions to find the source estimation of the algorithm
 PARAMETERS:
     graph: the nx graph used
-    obs_time: dictionnary node -> time of the infection
+    obs_time: dictionnary {node: time of the infection}
     distribution: distribution used
+RETURN:
+    s_est: estimation of the true source
+    ranked: sorted(in decreasing order) list of tuple (node, value in which we do the estimation)
 '''
 def trbs_empirical(graph, obs_time_filt, distribution):
 
