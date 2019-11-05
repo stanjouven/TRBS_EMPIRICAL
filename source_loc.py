@@ -14,21 +14,10 @@ PARAMETERS:
 '''
 def trbs_empirical(graph, obs_time_filt, distribution):
 
-    #print('obs time', obs_time_filt)
-
-    #largest_graph_cc = graph.subgraph(max(nx.connected_components(graph), key=len))
-    #obs_time_filt = observer_filtering(obs_time, largest_graph_cc)
+    nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
     obs_filt = np.array(list(obs_time_filt.keys()))
-    path_lengths = {}
-    #nodes = len(list(graph.nodes()))
-    #random.sample(range(0, nodes-1), len(obs_filt))
 
-    graph = preprocess(obs_filt, graph, distribution)
-
-    for o in obs_filt:
-        ### Computation of the shortest paths from every observer to all other nodes
-        path_lengths[o] = nx.single_source_dijkstra_path_length(graph, o)
-
+    path_lengths = preprocess(obs_filt, graph, distribution)
 
     ### Run the estimation
     s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
@@ -44,13 +33,23 @@ PARAMETERS:
     distr: the distribution used
 Return dictionnary: node -> time to go from that node to the given observer
 '''
-def preprocess(observer, graph, distr):
-    for o in observer:
+def preprocess(observer, graph, distr, nb_diffusions):
+    path_lengths = initialize_dataframe(observer)
+    for diff in range(nb_diffusions):
         ### Initialization of the edge delay
         edges = graph.edges()
         for (u, v) in edges:
             graph[u][v]['weight'] = graph[u][v]['weight'] + abs(distr.rvs())
+        for o in observer:
+            ### Computation of the shortest paths from every observer to all other nodes
+            path_lengths[str(o)] += pd.Series(nx.single_source_dijkstra_path_length(graph, o))
+    path_lengths = path_lengths / len(observer)
+    return path_lengths.to_dict()
 
-    for (u, v) in edges:
-        graph[u][v]['weight'] = graph[u][v]['weight'] / len(observer)
-    return graph
+
+
+def initialize_dataframe(observer):
+    path_lengths = pd.DataFrame()
+    for o in observer:
+        path_lengths[o] = 0
+    return path_lengths
