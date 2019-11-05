@@ -8,7 +8,7 @@ def source_estimate(graph, obs_time, path_lengths):
     var_T = {}
     for node in list(graph.nodes()):
         for obs in np.array(list(obs_time.keys())):
-            T[node].append(obs_time[obs] - path_lengths[obs][node])
+            T[node].append(obs_time[obs] - path_lengths[str(obs)][node])
         var_T[node] = np.var(T[node])
 
     min_var = np.min(list(var_T.values()))
