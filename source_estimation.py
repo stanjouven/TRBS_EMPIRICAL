@@ -1,5 +1,6 @@
 import networkx as nx
 import numpy as np
+import collections
 
 
 def source_estimate(graph, obs_time, path_lengths):
