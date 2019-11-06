@@ -3,8 +3,6 @@ import networkx as nx
 import pandas as pd
 import operator
 import random
-
-
 import TRBS_EMPIRICAL.source_estimation as se
 
 '''
@@ -23,7 +21,10 @@ def trbs_empirical(graph, obs_time_filt, distribution):
     obs_filt = np.array(list(obs_time_filt.keys()))
 
     path_lengths = preprocess(obs_filt, graph, distribution, nb_diffusions)
+    print('.........')
+    print(path_lengths)
     path_lengths = compute_mean_shortest_path(path_lengths)
+    print(path_lengths)
 
     ### Run the estimation
     s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
