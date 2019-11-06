@@ -49,7 +49,7 @@ def preprocess(observer, graph, distr, nb_diffusions):
         ### edge delay
         edges = graph.edges()
         for (u, v) in edges:
-            graph[u][v]['weight'] = graph[u][v]['weight'] + abs(distr.rvs())
+            graph[u][v]['weight'] = abs(distr.rvs())
         for o in observer:
             ### Computation of the shortest paths from every observer to all other nodes
             path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph, o))
