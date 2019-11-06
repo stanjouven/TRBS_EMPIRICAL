@@ -22,6 +22,7 @@ def trbs_empirical(graph, obs_time_filt, distribution):
 
     path_lengths = preprocess(obs_filt, graph, distribution, nb_diffusions)
     path_lengths = compute_mean_shortest_path(path_lengths)
+    print(path_lengths)
 
     ### Run the estimation
     s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
