@@ -22,6 +22,7 @@ def trbs_empirical(graph, obs_time_filt, distribution):
 
     path_lengths = preprocess(obs_filt, graph, distribution, nb_diffusions)
     path_lengths = compute_mean_shortest_path(path_lengths)
+    print('mean -------------------')
     print(path_lengths)
 
     ### Run the estimation
@@ -51,6 +52,8 @@ def preprocess(observer, graph, distr, nb_diffusions):
         for o in observer:
             ### Computation of the shortest paths from every observer to all other nodes
             path_lengths_temp[str(o)] = pd.Series(nx.single_source_dijkstra_path_length(graph, o))
+            print('...............')
+            print(nx.single_source_dijkstra_path_length(graph, o))
         path_lengths = path_lengths.append(path_lengths_temp)
     return path_lengths
 
