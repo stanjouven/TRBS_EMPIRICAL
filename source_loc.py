@@ -55,6 +55,7 @@ def preprocess(observer, graph, distr, nb_diffusions):
             print('...............')
             print(nx.single_source_dijkstra_path_length(graph, o))
         path_lengths = path_lengths.append(path_lengths_temp)
+        print('____________________________________________________')
     return path_lengths
 
 
