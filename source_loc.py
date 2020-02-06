@@ -1,7 +1,6 @@
 import numpy as np
 import networkx as nx
 import pandas as pd
-import operator
 import random
 import TRBS_EMPIRICAL.source_estimation as se
 

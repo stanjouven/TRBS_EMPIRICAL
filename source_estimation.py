@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 import collections
+import operator
 
 '''
 Estimation of the true source according to the paper
