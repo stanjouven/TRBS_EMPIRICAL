@@ -24,10 +24,9 @@ def trbs_empirical(graph, obs_time_filt, distribution):
     path_lengths = compute_mean_shortest_path(path_lengths)
 
     ### Run the estimation
-    s_est, likelihoods = se.source_estimate(graph, obs_time_filt, path_lengths)
-    ranked = sorted(likelihoods.items(), key=operator.itemgetter(1), reverse=False)
+    s_est, scores = se.source_estimate(graph, obs_time_filt, path_lengths)
 
-    return (s_est, ranked)
+    return (s_est, scores)
 
 '''
 Apply the given distribution to the edge of the graph and then create a dataframe to store
