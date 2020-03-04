@@ -16,10 +16,11 @@ RETURN:
 '''
 def trbs_empirical(graph, obs_time_filt, distribution):
 
-    nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
+    #nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
+    DIFFUSION = 150
     obs_filt = np.array(list(obs_time_filt.keys()))
 
-    path_lengths = preprocess(obs_filt, graph, distribution, nb_diffusions)
+    path_lengths = preprocess(obs_filt, graph, distribution, DIFFUSION)
     path_lengths = compute_mean_shortest_path(path_lengths)
 
     ### Run the estimation
