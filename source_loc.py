@@ -17,7 +17,7 @@ RETURN:
 def trbs_empirical(graph, obs_time_filt, distribution):
 
     #nb_diffusions = int(np.sqrt(len(list(graph.nodes()))))
-    DIFFUSION = 20
+    DIFFUSION = 50
     obs_filt = np.array(list(obs_time_filt.keys()))
 
     path_lengths = preprocess(obs_filt, graph, distribution, DIFFUSION)
